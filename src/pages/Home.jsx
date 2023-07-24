@@ -1,11 +1,12 @@
 import React from 'react'
 import UserResults from '../components/users/UserResults'
+import UserSearch from '../components/users/UserSearch'
 
 function Home() {
   return (
       <div>
-          <h1>Welcome Amr</h1>
       {/* <p>{import.meta.env.VITE_GITHUB_TOKEN}</p> */}
+      <UserSearch />
       <UserResults />
       </div>
   )
