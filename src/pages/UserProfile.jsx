@@ -4,16 +4,27 @@ import { useParams, Link } from 'react-router-dom'
 import Spinner from '../components/layout/Spinner'
 import {FaCodepen, FaStore, FaUserFriends, FaUsers } from 'react-icons/fa'
 import RepoList from '../components/repos/RepoList'
+import {getUserProfileAndRepos} from '../context/github/GithubActions'
 
 function UserProfile() {
-  const { getUserProfile, userProfile, loading, repos, getRepos} = useContext(GithubContext)
+  const { userProfile, loading, repos, dispatch} = useContext(GithubContext)
   
   const params = useParams()
 
   useEffect(() => {
-    getUserProfile(params.login)
-    getRepos(params.login)
-  }, [])
+    dispatch({ type: 'SET_LOADING' })
+    
+    const getUserData = async () => {
+      const userData = await getUserProfileAndRepos(params.login)
+
+      dispatch({
+        type: 'GET_USER_PROFILE_AND_REPOS',
+        payload: userData
+      })
+    }
+    getUserData()
+    
+  }, [dispatch, params.login])
   
   const {
     name,
@@ -83,8 +94,8 @@ function UserProfile() {
                 <div className='stat'>
                   <div className='stat-title text-md'>Website</div>
                   <div className='text-lg stat-value'>
-                    <a href={websiteUrl} target='_blank' rel='noreferrer'>
-                      {websiteUrl}
+                    <a href={`https://${blog}`} target='_blank' rel='noreferrer'>
+                      {blog}
                     </a>
                   </div>
                 </div>
